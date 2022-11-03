@@ -40,11 +40,6 @@ class FollowSerializer(serializers.ModelSerializer):
         slug_field='username'
     )
 
-    def validate(self, data):
-        if self.context['request'].user == data['following']:
-            raise serializers.ValidationError('users_cannot_follow_themselves')
-        return data
-
     class Meta:
         model = Follow
         fields = ('user', 'following')
@@ -54,3 +49,8 @@ class FollowSerializer(serializers.ModelSerializer):
                 fields=('user', 'following')
             )
         ]
+
+    def validate(self, data):
+        if self.context['request'].user == data['following']:
+            raise serializers.ValidationError('users_cannot_follow_themselves')
+        return data
